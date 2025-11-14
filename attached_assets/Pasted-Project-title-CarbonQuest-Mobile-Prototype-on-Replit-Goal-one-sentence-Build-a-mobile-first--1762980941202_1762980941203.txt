@@ -1,0 +1,216 @@
+Project title: CarbonQuest — Mobile (Prototype on Replit)
+
+Goal (one sentence)
+Build a mobile-first, gamified sustainability app for Gen Z that turns daily eco-actions into quests, boss battles and social leaderboards so users form habits and see measurable environmental impact. Reference: CarbonQuest prototype doc. 
+
+CarbonQuest - Prototyping & Use…
+
+Target platform & stack (recommended)
+
+Platform: Mobile (iOS & Android) — prototype with React Native + Expo on Replit.
+
+Language: TypeScript.
+
+State: Redux Toolkit or React Context for global state.
+
+Navigation: React Navigation.
+
+Backend (prototype): Firebase Firestore + Firebase Auth (email/Google), Cloud Functions for server logic (boss battle calculations, rewards conversion).
+
+Optional: Supabase if preferred.
+
+Assets & UI: Pull screens from Figma wireframe referenced in the doc; use placeholder images & SVGs for Carbon Ogre and icons.
+
+High-level requirements (features summary)
+
+Onboarding: short, gamified onboarding that explains Carbon Ogre, World Health bar, XP and Levels.
+
+Main dashboard: shows XP (e.g., 40/100), Level, World Health progress, four categories (Transport, Food, Energy, Consumption) each with Level and Streak.
+
+Daily quests: list of actionable quests with progress (e.g., “Ride your bike 3 times” 2/3).
+
+Active quests & habits UI: complete quests, show stars/points rewards (50/75).
+
+Boss battles: progress meter that aggregates user & community quest completions to trigger battles against the Carbon Boss/Ogre.
+
+Leaderboards: global and friends leaderboard; provide context on ranks & rewards.
+
+Rewards & conversion: eco-points exchangeable for real-world rewards (placeholder implementation).
+
+Social features: friend invites, share progress, Discord/Instagram integration for growth.
+
+Analytics & KPIs: retention, average daily quest completion, active community growth.
+
+Accessibility: readable fonts, contrast, tappable areas >= 44px.
+
+Testing: unit tests for key logic, e2e flows for onboarding → quest → boss fight.
+
+UX screens & components (explicit)
+
+Splash / Onboarding
+
+3 screens: mission statement, how quests work, social features.
+
+CTA: sign up / continue as guest.
+
+Authentication
+
+Email/password + Google sign-in (Firebase), skip/guest mode.
+
+Profile creation (username, avatar).
+
+Main Dashboard
+
+Top: User XP (progress bar), Level (e.g., Lv 1).
+
+World Health bar (global progress %).
+
+Four category cards: Transport, Food, Energy, Consumption; each shows Level & streak.
+
+CTA to “Active Quests” and “Battle”.
+
+Daily Habits / Active Quests
+
+Scrollable list of daily quests; each card shows current progress, rewards (stars), and “Mark Complete” or “Log Activity”.
+
+Subtasks (e.g., 0/5 plant-based meals).
+
+Buttons: “Claim”, “Fail”, “Share”.
+
+Quest Detail
+
+Title, description, required actions, expiry, rewards, suggested tips.
+
+Evidence upload optional (photo or quick check-in).
+
+Boss Battle Screen
+
+World Health progress and current Boss HP.
+
+Visual of Carbon Ogre; show community contribution & how individual quests feed boss damage.
+
+Triggered when collective progress threshold reached — mini animation & reward distribution.
+
+Leaderboards
+
+Tabs: Friends, Campus, Global.
+
+Show rank, XP, recent achievements, context on rewards for positions.
+
+Rewards / Store
+
+List of redeemable items (placeholder coupons, donation options, partner discounts).
+
+Display conversion rules for eco-points → real impact.
+
+Profile & Social
+
+Track Stats: quests completed, streaks, emissions avoided (estimates).
+
+Invite friends, share to Instagram, join Discord.
+
+Settings & Help
+
+Accessibility, notifications, data & privacy, FAQ.
+
+Data model (example Firestore collections)
+
+users: { uid, displayName, avatar, xp, level, streaks: {transport, food, energy, consumption}, joinedAt, friends: [uid], campusTag }
+
+quests: { id, title, category, description, target, unit, rewardStars, repeatsDaily, activeFrom, activeTo }
+
+userQuestProgress: { userId, questId, progress, lastCompletedAt }
+
+boss: { id, name, hp, maxHp, worldHealthPercent, active: bool, triggeredAt, contributors: [{userId, damage}] }
+
+leaderboards: computed or aggregated collection
+
+rewards: { id, title, costStars, type, redemptionInfo }
+
+analytics: events for onboarding_complete, quest_completed, boss_triggered, reward_redeemed
+
+Core gamification rules (implement exactly)
+
+Quest reward: completing a quest grants X stars + XP.
+
+Streaks: completing the same category quest daily increments streak; streaks grant bonus XP at thresholds (3, 7, 14).
+
+Boss battle trigger: global aggregated quest completions fill World Health; when it reaches threshold (e.g., 1000 community stars) Boss appears.
+
+Boss damage: each quest completion converts to damage = floor(stars / 10) or similar balanced formula coded server-side.
+
+Reward conversion transparency: show how points translate to impact (e.g., “50 stars ≈ 0.5 trees planted (est.)”) — estimates can be placeholder values with a disclaimer.
+
+API & backend endpoints (sample)
+
+POST /api/auth/login (Firebase handled)
+
+GET /api/quests/today
+
+POST /api/quest/:id/complete { evidence? }
+
+GET /api/boss/status
+
+POST /api/boss/contribute { userId, damage }
+
+POST /api/rewards/redeem
+
+GET /api/leaderboard?scope=global|friends|campus
+
+Analytics & KPIs (instrumentation)
+
+Track events: user_registered, onboarding_complete, quest_view, quest_complete, boss_defeated, reward_redeemed, invite_sent, share.
+
+Dashboard metrics to show:
+
+Retention rate (target: 60% after 4 weeks).
+
+Average daily quests completed (target: 3 per user / day).
+
+Active community growth (target: 500 active users within 3 months). 
+
+CarbonQuest - Prototyping & Use…
+
+Growth & channels (implement small hooks)
+
+Invite code flow with campus tagging.
+
+Shareable achievement cards (image that can be posted to Instagram).
+
+Discord community link & in-app join button.
+
+Referral rewards (in-app stars for invites).
+
+Design & assets
+
+Use the Figma wireframe / Claude clickable prototype as source of truth for layout and copy (link referenced in the doc).
+
+Provide placeholder Carbon Ogre SVG / animated Lottie.
+
+Color palette: friendly, eco tones; ensure contrast for accessibility.
+
+Testing & validation tasks (deliverables for prototype build)
+
+Implement unit tests for quest completion, streak logic, XP calculations.
+
+Manual e2e test checklist: sign up → complete 3 quests → observe XP/streak updates → trigger boss contribution → see leaderboard updates.
+
+Usability: ensure boss flow is visually and functionally clear (feedback from doc: earlier users found boss flow confusing — fix with clear progress bars and triggers). 
+
+CarbonQuest - Prototyping & Use…
+
+MVP scope (what to build in the initial Replit prototype)
+
+Auth (Firebase)
+
+Main dashboard + 4 category cards
+
+Daily quest list + complete/claim flow
+
+World Health progress & Boss status visualization (no complex multiplayer sync; aggregate mock data acceptable)
+
+Leaderboard (friends via simple follower list)
+
+Basic rewards redemption UI (mocked)
+
+Analytics events logging to console or Firebase Analytics
